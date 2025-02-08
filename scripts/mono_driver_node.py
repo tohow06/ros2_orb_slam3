@@ -57,24 +57,24 @@ class MonoDriver(Node):
         super().__init__(node_name) # Initializes the rclpy.Node class. It expects the name of the node
 
         # Initialize parameters to be passed from the command line (or launch file)
-        self.declare_parameter("settings_name","EuRoC")
-        self.declare_parameter("image_seq","NULL")
+        self.declare_parameter("settings_name", "EuRoC")
+        self.declare_parameter("image_seq", "NULL")
+        self.declare_parameter("dataset_path", "/mnt/mydata/ASU_Lunar_Explorers/LunarAutonomyChallenge/ros_ws/src/ros2_orb_slam3/TEST_DATASET")
 
         #* Parse values sent by command line
         self.settings_name = str(self.get_parameter('settings_name').value) 
         self.image_seq = str(self.get_parameter('image_seq').value)
+        self.dataset_path = str(self.get_parameter('dataset_path').value)
 
         # DEBUG
         print(f"-------------- Received parameters --------------------------\n")
         print(f"self.settings_name: {self.settings_name}")
         print(f"self.image_seq: {self.image_seq}")
+        print(f"self.dataset_path: {self.dataset_path}")
         print()
 
         # Global path definitions
-        self.home_dir = str(Path.home()) + "/ros2_test/src/ros2_orb_slam3" #! Change this to match path to your workspace
-        self.parent_dir = "TEST_DATASET" #! Change or provide path to the parent directory where data for all image sequences are stored
-        self.image_sequence_dir = self.home_dir + "/" + self.parent_dir + "/" + self.image_seq # Full path to the image sequence folder
-
+        self.image_sequence_dir = os.path.join(self.dataset_path, self.image_seq)
         print(f"self.image_sequence_dir: {self.image_sequence_dir}\n")
 
         # Global variables
